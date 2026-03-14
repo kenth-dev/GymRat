@@ -18,11 +18,11 @@ class CheckUserRole
         $user = $request->user();
 
         if (! $user) {
-            abort(403, 'Unauthorized');
+            return redirect()->route('login');
         }
 
         if (! in_array($user->role, $roles, true)) {
-            abort(403, 'Unauthorized');
+            return redirect()->route('dashboard');
         }
 
         return $next($request);
