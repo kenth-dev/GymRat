@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ClassType;
+use App\Models\ScheduledClass;
+
 
 class ScheduledClassController extends Controller
 {
@@ -29,7 +31,23 @@ class ScheduledClassController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userId = $request->user()->id;
+        $date_time = $request->input('class_date') . ' ' . $request->input('class_time');
+
+        $request->merge([
+            'date_time' => $date_time,
+            'instructor_id' => $userId,
+        ]);
+
+        $validated = $request->validate([
+            'class_type_id' => 'required|exists:class_types,id',
+            'date_time' => 'required|date|unique:scheduled_classes,date_time|after:now',
+            'instructor_id' => 'required|exists:users,id',
+        ]);
+
+        ScheduledClass::create($validated);
+
+        return redirect()->route('schedule.create')->with('success', 'Class scheduled successfully.');
     }
 
     /**
