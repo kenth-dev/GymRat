@@ -480,6 +480,91 @@ input[type="checkbox"] {
 	transform: translateY(-1px);
 }
 
+.upcoming-panel {
+	padding: 1.7rem;
+	max-width: 72rem;
+	margin: 0 auto;
+}
+
+.upcoming-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1.35rem 0;
+	border-bottom: 2px solid rgba(249, 115, 22, 0.35);
+}
+
+.upcoming-row:last-child {
+	border-bottom: none;
+}
+
+.upcoming-class-name {
+	font-size: 1.7rem;
+	font-weight: 700;
+	line-height: 1.1;
+	background: linear-gradient(to right, #f97316, #dc2626);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.upcoming-class-duration {
+	margin-top: 0.4rem;
+	font-size: 1.05rem;
+	color: #9ca3af;
+}
+
+.upcoming-row-right {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.25rem;
+	min-width: 8.75rem;
+	text-align: center;
+}
+
+.upcoming-time {
+	font-size: 1.55rem;
+	font-weight: 700;
+	line-height: 1;
+	color: #f3f4f6;
+}
+
+.upcoming-date {
+	font-size: 0.98rem;
+	color: #9ca3af;
+	margin-bottom: 0.35rem;
+}
+
+.upcoming-cancel-btn {
+	background: #b91c1c;
+	border: 1px solid #991b1b;
+	color: #f9fafb;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	padding: 0.45rem 1.05rem;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.upcoming-cancel-btn:hover {
+	background: #dc2626;
+	transform: translateY(-1px);
+}
+
+.upcoming-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.85rem;
+	padding: 1.25rem 0;
+	color: #d1d5db;
+	font-size: 0.95rem;
+}
+
 @media (max-width: 640px) {
 	.schedule-panel {
 		padding: 1.25rem;
@@ -492,5 +577,28 @@ input[type="checkbox"] {
 	.schedule-grid {
 		grid-template-columns: 1fr;
 		gap: 1rem;
+	}
+
+	.upcoming-panel {
+		padding: 1rem;
+	}
+
+	.upcoming-row {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.85rem;
+	}
+
+	.upcoming-row-right {
+		align-items: flex-start;
+		min-width: auto;
+	}
+
+	.upcoming-class-name {
+		font-size: 1.4rem;
+	}
+
+	.upcoming-time {
+		font-size: 1.3rem;
 	}
 }

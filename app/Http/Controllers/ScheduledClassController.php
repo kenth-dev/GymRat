@@ -12,10 +12,18 @@ class ScheduledClassController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $scheduledClasses = $request->user()
+            ->scheduledClasses()
+            ->with('classType')
+            ->where('date_time', '>=', now())
+            ->oldest('date_time')
+            ->get();
+
+        return view('instructor.upcoming', compact('scheduledClasses'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -47,14 +55,20 @@ class ScheduledClassController extends Controller
 
         ScheduledClass::create($validated);
 
-        return redirect()->route('schedule.create')->with('success', 'Class scheduled successfully.');
+        return redirect()->route('schedule.index')->with('success', 'Class scheduled successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, ScheduledClass $schedule)
     {
-        //
+        if ($schedule->instructor_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        $schedule->delete();
+
+        return redirect()->route('schedule.index')->with('success', 'Class canceled successfully.');
     }
 }
