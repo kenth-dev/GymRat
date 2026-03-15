@@ -62,8 +62,8 @@ class ScheduledClassController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request, ScheduledClass $schedule)
-    {
-        if ($schedule->instructor_id !== $request->user()->id) {
+    {   
+        if($request->user()->cannot('delete', $schedule)) {
             abort(403);
         }
 
