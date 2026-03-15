@@ -5,26 +5,30 @@
         </h2>
     </x-slot>
 
+        @if (session('success') || $errors->any())
+            <div class="fixed top-20 right-6 z-50 w-full max-w-sm space-y-3">
+                @if (session('success'))
+                    <div class="alert shadow-lg">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-error shadow-lg">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
+        @endif
+
     <div class="py-12 dashboard-content-wrap">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg dashboard-panel">
                 <div class="schedule-panel dashboard-panel-text">
-                    @if (session('success'))
-                        <div class="alert">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    @if ($errors->any())
-                        <div class="alert alert-error">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
                     <form method="POST" action="{{ route('schedule.store') }}" class="schedule-form">
                         @csrf
 
