@@ -555,6 +555,25 @@ input[type="checkbox"] {
 	transform: translateY(-1px);
 }
 
+.book-action-btn {
+	background: #111827;
+	border: 1px solid #1f2937;
+	color: #f9fafb;
+	font-size: 0.72rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	padding: 0.45rem 1.05rem;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.book-action-btn:hover {
+	background: #f97316;
+	transform: translateY(-1px);
+}
+
 .upcoming-empty {
 	display: flex;
 	flex-direction: column;
