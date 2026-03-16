@@ -135,6 +135,24 @@ body {
 	color: #fca5a5;
 }
 
+.toast-auto-dismiss {
+	animation: toast-dismiss 3s ease forwards;
+}
+
+@keyframes toast-dismiss {
+	0%,
+	65% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(-10px);
+		visibility: hidden;
+		pointer-events: none;
+	}
+}
+
 .form-group {
 	margin-bottom: 1.25rem;
 }

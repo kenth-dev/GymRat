@@ -8,13 +8,13 @@
         @if (session('success') || $errors->any())
             <div class="fixed top-20 right-6 z-50 w-full max-w-sm space-y-3">
                 @if (session('success'))
-                    <div class="alert shadow-lg">
+                    <div class="alert shadow-lg toast-auto-dismiss">
                         {{ session('success') }}
                     </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="alert alert-error shadow-lg">
+                    <div class="alert alert-error shadow-lg toast-auto-dismiss">
                         <ul>
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
