@@ -25,6 +25,7 @@ Route::middleware(['auth', 'role:member'])->group(function () {
         return view('member.dashboard');
     })->name('member.dashboard');
     Route::get('/member/bookings', [BookingController::class, 'index'])->name('booking.index');
+    Route::get('/member/bookings/create', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/member/bookings', [BookingController::class, 'store'])->name('booking.store');
     Route::delete('/member/bookings/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
 });

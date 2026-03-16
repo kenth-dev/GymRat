@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function index(Request $request)
+    public function create(Request $request)
     {
         $scheduledClasses = ScheduledClass::with(['classType', 'instructor'])
             ->where('date_time', '>=', now())
@@ -22,6 +22,18 @@ class BookingController extends Controller
         return view('member.book', compact('scheduledClasses', 'bookedClassIds'));
     }
 
+    public function index(Request $request)
+    {
+        $scheduledClasses = $request->user()
+            ->bookedClasses()
+            ->with(['classType', 'instructor'])
+            ->where('date_time', '>=', now())
+            ->oldest('date_time')
+            ->get();
+
+        return view('member.upcoming', compact('scheduledClasses'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -31,18 +43,18 @@ class BookingController extends Controller
         $scheduledClass = ScheduledClass::findOrFail($validated['scheduled_class_id']);
 
         if ($scheduledClass->date_time->isPast()) {
-            return redirect()->route('booking.index')->withErrors(['booking' => 'You can only book upcoming classes.']);
+            return redirect()->route('booking.create')->withErrors(['booking' => 'You can only book upcoming classes.']);
         }
 
         $request->user()->bookedClasses()->syncWithoutDetaching([$scheduledClass->id]);
 
-        return redirect()->route('booking.index')->with('success', 'Class booked successfully.');
+        return redirect()->route('booking.create')->with('success', 'Class booked successfully.');
     }
 
     public function destroy(Request $request, ScheduledClass $booking)
     {
         $request->user()->bookedClasses()->detach($booking->id);
 
-        return redirect()->route('booking.index')->with('success', 'Booking canceled successfully.');
+        return redirect()->back()->with('success', 'Booking canceled successfully.');
     }
 }
