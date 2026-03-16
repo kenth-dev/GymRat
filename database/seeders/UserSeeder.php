@@ -16,17 +16,20 @@ class UserSeeder extends Seeder
         User::factory()->create([
             'name' => 'Kenth',
             'email' => 'ken@example.com',
+            'password' => bcrypt('password')
         ]);
 
         User::factory()->create([
             'name' => 'John the instructor',
             'email' => 'instructor@example.com',
+            'password' => bcrypt('password'),
             'role' => 'instructor'
         ]);
 
         User::factory()->create([
             'name' => 'tyler the creator',
             'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
             'role' => 'admin'
         ]);
 
