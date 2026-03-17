@@ -52,7 +52,8 @@ class BookingController extends Controller
     }
 
     public function destroy(Request $request, ScheduledClass $booking)
-    {
+    { 
+
         $request->user()->bookedClasses()->detach($booking->id);
 
         return redirect()->back()->with('success', 'Booking canceled successfully.');
