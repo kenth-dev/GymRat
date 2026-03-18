@@ -14,10 +14,11 @@
     <body class="gymrat-page welcome-page">
         <div class="container">
             <div class="logo">GYMRAT</div>
-            <p class="tagline">Track your fitness journey</p>
 
             <div class="hero">
-                <p class="hero-title">Push harder. Go further. Become stronger.</p>
+                <p class="hero-desc text-lg">Push harder.</p>
+                <p class="hero-desc text-lg">  Go further.</p>
+                <p class="hero-desc text-lg"> Become stronger.</p>
             </div>
 
             <div class="cta-buttons">
