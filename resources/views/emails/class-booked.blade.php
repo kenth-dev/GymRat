@@ -5,111 +5,179 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Class Booking Confirmation</title>
     <style>
+        /* Design tokens from app.css */
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+            color: #e5e7eb;
+        }
+
+        .wrapper {
             max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 2.5rem 1.5rem;
         }
-        .header {
-            background-color: #4F46E5;
-            color: white;
-            padding: 20px;
+
+        /* .logo */
+        .logo {
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: 0.15em;
+            background: linear-gradient(to right, #f97316, #dc2626);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-align: center;
-            border-radius: 5px 5px 0 0;
+            margin-bottom: 0.5rem;
         }
-        .content {
-            background-color: #f9fafb;
-            padding: 30px;
-            border: 1px solid #e5e7eb;
+
+        /* .tagline */
+        .tagline {
+            color: #9ca3af;
+            text-align: center;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
         }
-        .class-details {
-            background-color: white;
-            padding: 20px;
-            margin: 20px 0;
-            border-left: 4px solid #4F46E5;
-            border-radius: 4px;
+
+        /* .dashboard-panel */
+        .panel {
+            background: rgba(18, 18, 18, 0.85);
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+            border-radius: 0.5rem;
+            overflow: hidden;
         }
+
+        /* .gymrat-dashboard-heading */
+        .panel-heading {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .panel-heading h1 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #f97316, #dc2626);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.03em;
+        }
+
+        /* .upcoming-panel */
+        .panel-body {
+            padding: 1.7rem 2rem;
+        }
+
+        .greeting {
+            color: #e5e7eb;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        /* .upcoming-row */
         .detail-row {
-            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 2px solid rgba(249, 115, 22, 0.35);
         }
-        .label {
-            font-weight: bold;
-            color: #4F46E5;
+
+        .detail-row:last-child {
+            border-bottom: none;
         }
+
+        /* .upcoming-class-name */
+        .detail-label {
+            font-size: 1rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #f97316, #dc2626);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* .upcoming-class-duration */
+        .detail-value {
+            font-size: 1rem;
+            color: #9ca3af;
+            text-align: right;
+        }
+
+        /* .upcoming-time */
+        .detail-value strong {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f3f4f6;
+            -webkit-text-fill-color: #f3f4f6;
+        }
+
+        /* .footer */
         .footer {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid #e5e7eb;
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid #2a2a2a;
             color: #6b7280;
-            font-size: 14px;
+            font-size: 0.875rem;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🎉 Booking Confirmed!</h1>
-    </div>
-    
-    <div class="content">
-        <p>Hi <strong>{{ $user->name }}</strong>,</p>
-        
-        <p>Great news! You've successfully booked your class at GymRat.</p>
-        
-        <div class="class-details">
-            <h2 style="margin-top: 0; color: #4F46E5;">Class Details</h2>
-            
-            <div class="detail-row">
-                <span class="label">Class:</span> 
-                {{ $scheduledClass->classType->name }}
+    <div class="wrapper">
+        <div class="logo">GYMRAT</div>
+        <p class="tagline">Train hard. Stay consistent.</p>
+
+        <div class="panel">
+            <div class="panel-heading">
+                <h1>Booking Confirmed</h1>
             </div>
-            
-            <div class="detail-row">
-                <span class="label">Description:</span> 
-                {{ $scheduledClass->classType->description }}
+
+            <div class="panel-body">
+                <p class="greeting">Hi <strong>{{ $user->name }}</strong>, your class has been booked successfully.</p>
+
+                <div class="detail-row">
+                    <span class="detail-label">Class</span>
+                    <span class="detail-value">{{ $scheduledClass->classType->name }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Description</span>
+                    <span class="detail-value">{{ $scheduledClass->classType->description }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Date</span>
+                    <span class="detail-value">{{ $scheduledClass->date_time->format('l, F j, Y') }}</span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Time</span>
+                    <span class="detail-value"><strong>{{ $scheduledClass->date_time->format('g:i a') }}</strong></span>
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Duration</span>
+                    <span class="detail-value">{{ $scheduledClass->classType->minutes }} minutes</span>
+                </div>
+
+                @if($scheduledClass->instructor)
+                <div class="detail-row">
+                    <span class="detail-label">Instructor</span>
+                    <span class="detail-value">{{ $scheduledClass->instructor->name }}</span>
+                </div>
+                @endif
             </div>
-            
-            <div class="detail-row">
-                <span class="label">Date:</span> 
-                {{ $scheduledClass->date_time->format('l, F j, Y') }}
-            </div>
-            
-            <div class="detail-row">
-                <span class="label">Time:</span> 
-                {{ $scheduledClass->date_time->format('g:i A') }}
-            </div>
-            
-            <div class="detail-row">
-                <span class="label">Duration:</span> 
-                {{ $scheduledClass->classType->minutes }} minutes
-            </div>
-            
-            @if($scheduledClass->instructor)
-            <div class="detail-row">
-                <span class="label">Instructor:</span> 
-                {{ $scheduledClass->instructor->name }}
-            </div>
-            @endif
         </div>
-        
-        <p><strong>What to bring:</strong></p>
-        <ul>
-            <li>Water bottle</li>
-            <li>Towel</li>
-            <li>Comfortable workout clothes</li>
-        </ul>
-        
-        <p><strong>Important:</strong> Please arrive 10 minutes early to check in.</p>
-        
-        <p>If you need to cancel your booking, please do so at least 2 hours before the class starts.</p>
-    </div>
-    
-    <div class="footer">
-        <p>See you at the gym! 💪</p>
-        <p style="font-size: 12px;">This is an automated email from GymRat. Please do not reply to this email.</p>
+
+        <div class="footer">
+            <p>Please arrive 10 minutes early. Cancel at least 2 hours before the class if needed.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.75rem;">This is an automated email from GymRat. Please do not reply.</p>
+        </div>
     </div>
 </body>
 </html>
