@@ -1,59 +1,83 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# GymRat
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A gym class management web application built with Laravel 12. Members can browse and book classes, instructors can schedule and manage their classes, and all parties are notified via email and in-app notifications when a booking is made.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Backend** — Laravel 12, PHP 8.2+
+- **Frontend** — Blade, Tailwind CSS, Vite
+- **Database** — MySQL
+- **Auth** — Laravel Breeze
+- **Testing** — Pest
+- **Dev Tools** — Laravel Telescope, Laravel Pail
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Roles
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+There are three user roles. Each role is redirected to its own dashboard on login.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Role | What they can do |
+|---|---|
+| `member` | Browse classes, book classes, cancel bookings, view upcoming booked classes |
+| `instructor` | Schedule classes, view their upcoming classes, cancel their own classes |
+| `admin` | Access to everything |
 
-## Laravel Sponsors
+Role access is enforced by the `CheckUserRole` middleware and two Gates defined in `AppServiceProvider`:
+- `schedule-class` — instructors only
+- `book-class` — members only
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Features
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Authentication
+Handled by Laravel Breeze. Users can register, log in, reset their password, and manage their profile. On login, `DashboardController` reads the user's role and redirects them to the correct dashboard.
 
-## Contributing
+### Class Scheduling (Instructor)
+Instructors can schedule a new class by selecting a class type, date, and time. The `date_time` field must be unique and in the future. Instructors can also cancel their own scheduled classes — canceling detaches all member bookings from that class.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Class Booking (Member)
+Members can browse all upcoming classes and book any they haven't already booked. Booking a past class is blocked. Members can cancel a booking from their upcoming classes page.
 
-## Code of Conduct
+### Email Notifications
+Two emails are sent every time a member books a class:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Member** receives a booking confirmation email (`emails.class-booked`)
+- **Instructor** receives a new booking notification email (`emails.instructor-booking-notification`)
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Database
 
-## License
+### Tables
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Table | Description |
+|---|---|
+| `users` | All users with a `role` column (`member`, `instructor`, `admin`) |
+| `class_types` | Predefined class types with name, description, and duration |
+| `scheduled_classes` | Classes scheduled by instructors with a `date_time` and `instructor_id` |
+| `bookings` | Pivot table linking `users` and `scheduled_classes` |
+| `notifications` | Laravel database notifications for members and instructors |
+
+---
+
+## Seeders
+
+Seeders were implemented to populate the database with realistic starting data for development and manual testing. Running `php artisan db:seed` executes three seeders in order:
+
+- `UserSeeder` — creates 1 named member, 1 named instructor, and 1 named admin account, plus 10 additional random members and 10 additional random instructors generated via factories
+- `ClassTypeSeeder` — creates 5 fixed class types: Strength Training (60 min), Cardio (45 min), Yoga (60 min), Dance Fitness (60 min), and Boxing (30 min)
+- `ScheduledClassSeeder` — generates 10 upcoming scheduled classes using the `ScheduledClassFactory`, each randomly assigned to one of the seeded instructors and class types
+
+The following named accounts are available after seeding:
+
+| Role | Email | Password |
+|---|---|---|
+| Member | `ken@example.com` | `password` |
+| Instructor | `instructor@example.com` | `password` |
+| Admin | `admin@example.com` | `password` |
+
+---
