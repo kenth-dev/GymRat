@@ -25,10 +25,10 @@
                     @endcan
 
                     @can('book-class')
-                    <x-nav-link :href="route('booking.create')" :active="request()->routeIs('booking.create')">
+                    <x-nav-link :href="route('booking.index')" :active="request()->routeIs('booking.index')">
                         Book a Class
                     </x-nav-link>
-                    <x-nav-link :href="route('booking.index')" :active="request()->routeIs('booking.index')">
+                    <x-nav-link :href="route('booking.upcoming')" :active="request()->routeIs('booking.upcoming')">
                         Upcoming Classes
                     </x-nav-link>
                     @endcan
@@ -98,10 +98,10 @@
             @endcan
 
             @can('book-class')
-                <x-responsive-nav-link :href="route('booking.create')" :active="request()->routeIs('booking.create')">
+                <x-responsive-nav-link :href="route('booking.index')" :active="request()->routeIs('booking.index')">
                     Book a Class
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('booking.index')" :active="request()->routeIs('booking.index')">
+                <x-responsive-nav-link :href="route('booking.upcoming')" :active="request()->routeIs('booking.upcoming')">
                     Upcoming Classes
                 </x-responsive-nav-link>
             @endcan

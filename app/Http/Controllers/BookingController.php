@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ClassBookedMail;
 use App\Models\ScheduledClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
-    public function create(Request $request)
+    public function index(Request $request)
     {
         $scheduledClasses = ScheduledClass::with(['classType', 'instructor'])
             ->where('date_time', '>=', now())
@@ -22,18 +24,6 @@ class BookingController extends Controller
         return view('member.book', compact('scheduledClasses', 'bookedClassIds'));
     }
 
-    public function index(Request $request)
-    {
-        $scheduledClasses = $request->user()
-            ->bookedClasses()
-            ->with(['classType', 'instructor'])
-            ->where('date_time', '>=', now())
-            ->oldest('date_time')
-            ->get();
-
-        return view('member.upcoming', compact('scheduledClasses'));
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -43,12 +33,29 @@ class BookingController extends Controller
         $scheduledClass = ScheduledClass::findOrFail($validated['scheduled_class_id']);
 
         if ($scheduledClass->date_time->isPast()) {
-            return redirect()->route('booking.create')->withErrors(['booking' => 'You can only book upcoming classes.']);
+            return redirect()->route('booking.index')->withErrors(['booking' => 'You can only book upcoming classes.']);
         }
 
         $request->user()->bookedClasses()->syncWithoutDetaching([$scheduledClass->id]);
 
-        return redirect()->route('booking.create')->with('success', 'Class booked successfully.');
+        // Send confirmation email
+        Mail::to($request->user()->email)->send(
+            new ClassBookedMail($scheduledClass, $request->user())
+        );
+
+        return redirect()->route('booking.index')->with('success', 'Class booked successfully. Check your email for confirmation.');
+    }
+
+    public function upcoming(Request $request)
+    {
+        $scheduledClasses = $request->user()
+            ->bookedClasses()
+            ->with(['classType', 'instructor'])
+            ->where('date_time', '>=', now())
+            ->oldest('date_time')
+            ->get();
+
+        return view('member.upcoming', compact('scheduledClasses'));
     }
 
     public function destroy(Request $request, ScheduledClass $booking)

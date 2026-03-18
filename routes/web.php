@@ -25,7 +25,7 @@ Route::middleware(['auth', 'role:member'])->group(function () {
         return view('member.dashboard');
     })->name('member.dashboard');
     Route::get('/member/bookings', [BookingController::class, 'index'])->name('booking.index');
-    Route::get('/member/bookings/create', [BookingController::class, 'create'])->name('booking.create');
+    Route::get('/member/bookings/upcoming', [BookingController::class, 'upcoming'])->name('booking.upcoming');
     Route::post('/member/bookings', [BookingController::class, 'store'])->name('booking.store');
     Route::delete('/member/bookings/{booking}', [BookingController::class, 'destroy'])->name('booking.destroy');
 });
@@ -43,3 +43,15 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Test email preview route (remove in production)
+Route::get('/test-email', function () {
+    $user = \App\Models\User::where('role', 'member')->first();
+    $scheduledClass = \App\Models\ScheduledClass::with(['classType', 'instructor'])->first();
+    
+    if (!$user || !$scheduledClass) {
+        return 'Please create a member user and a scheduled class first.';
+    }
+    
+    return new \App\Mail\ClassBookedMail($scheduledClass, $user);
+})->middleware('auth');

@@ -59,7 +59,7 @@
                     @empty
                         <div class="upcoming-empty">
                             <p>You have no upcoming booked classes yet.</p>
-                            <a href="{{ route('booking.create') }}" class="btn btn-primary">Book a Class</a>
+                            <a href="{{ route('booking.index') }}" class="btn btn-primary">Book a Class</a>
                         </div>
                     @endforelse
                 </div>
