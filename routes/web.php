@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduledClassController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,9 @@ Route::get('instructor/dashboard', function () {
 
 Route::resource('instructor/schedule', ScheduledClassController::class)->only(['index', 'create', 'store','destroy'])->middleware(['auth', 'role:instructor']);
 
+
+Route::get('/notifications', [NotificationController::class, 'index'])->middleware('auth')->name('notifications.index');
+Route::get('/notifications/{id}', [NotificationController::class, 'show'])->middleware('auth')->name('notifications.show');
 
 /*member routes*/
 Route::middleware(['auth', 'role:member'])->group(function () {

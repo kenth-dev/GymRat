@@ -32,6 +32,16 @@
                         Upcoming Classes
                     </x-nav-link>
                     @endcan
+
+                    @if(Auth::user()->unreadNotifications->count() > 0)
+                    <x-nav-link :href="route('notifications.index')" :active="request()->routeIs('notifications.index')">
+                        Notifications <span class="notification-badge">{{ Auth::user()->unreadNotifications->count() }}</span>
+                    </x-nav-link>
+                    @else
+                    <x-nav-link :href="route('notifications.index')" :active="request()->routeIs('notifications.index')">
+                        Notifications
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -105,6 +115,13 @@
                     Upcoming Classes
                 </x-responsive-nav-link>
             @endcan
+
+            <x-responsive-nav-link :href="route('notifications.index')" :active="request()->routeIs('notifications.index')">
+                Notifications
+                @if(Auth::user()->unreadNotifications->count() > 0)
+                    <span class="notification-badge">{{ Auth::user()->unreadNotifications->count() }}</span>
+                @endif
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

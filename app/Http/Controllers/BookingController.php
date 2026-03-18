@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\ClassBookedMail;
 use App\Mail\InstructorBookingNotificationMail;
 use App\Models\ScheduledClass;
+use App\Notifications\ClassBookedInstructorNotification;
+use App\Notifications\ClassBookedMemberNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -39,15 +41,19 @@ class BookingController extends Controller
 
         $request->user()->bookedClasses()->syncWithoutDetaching([$scheduledClass->id]);
 
-        // Send confirmation email to member
+        // Send confirmation email + notification to member
         Mail::to($request->user()->email)->send(
             new ClassBookedMail($scheduledClass, $request->user())
         );
+        $request->user()->notify(new ClassBookedMemberNotification($scheduledClass));
 
         // Notify instructor
         if ($scheduledClass->instructor) {
             Mail::to($scheduledClass->instructor->email)->send(
                 new InstructorBookingNotificationMail($scheduledClass, $request->user())
+            );
+            $scheduledClass->instructor->notify(
+                new ClassBookedInstructorNotification($scheduledClass, $request->user())
             );
         }
 
