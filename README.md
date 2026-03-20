@@ -60,7 +60,6 @@ Two emails are sent every time a member books a class:
 | `class_types` | Predefined class types with name, description, and duration |
 | `scheduled_classes` | Classes scheduled by instructors with a `date_time` and `instructor_id` |
 | `bookings` | Pivot table linking `users` and `scheduled_classes` |
-| `notifications` | Laravel database notifications for members and instructors |
 
 ---
 
